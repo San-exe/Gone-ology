@@ -143,7 +143,7 @@ export default function OLAPWarehouse() {
           <div className="text-xs font-bold font-sans text-white mb-1.5">{data.payment_method}</div>
           <div className="flex justify-between space-x-4 text-zinc-300">
             <span>Churn Rate:</span>
-            <span className="font-bold text-rose-400">{data.churn_rate_pct.toFixed(2)}%</span>
+            <span className="font-bold text-pink-400">{data.churn_rate_pct.toFixed(2)}%</span>
           </div>
           <div className="flex justify-between space-x-4 text-zinc-400">
             <span>Total Accounts:</span>
@@ -151,7 +151,7 @@ export default function OLAPWarehouse() {
           </div>
           <div className="flex justify-between space-x-4 text-zinc-400">
             <span>Avg Spend:</span>
-            <span className="text-cyan-400">${data.avg_monthly_charges.toFixed(2)}/mo</span>
+            <span className="text-pink-400">${data.avg_monthly_charges.toFixed(2)}/mo</span>
           </div>
         </div>
       );
@@ -169,9 +169,7 @@ export default function OLAPWarehouse() {
         <h1 className="text-2xl font-black tracking-tight text-white flex items-center space-x-3">
           <span>OLAP Warehouse & Revenue Forensics</span>
         </h1>
-        <p className="text-sm text-zinc-400 leading-relaxed max-w-3xl mt-1">
-          Multidimensional slicing across 7,043 enterprise accounts, modeling retention variance across contract commitments, delivery infrastructure, and payment mechanics.
-        </p>
+       
       </div>
 
       {/* 4 Metric KPI Cards */}
@@ -182,7 +180,7 @@ export default function OLAPWarehouse() {
             <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
               Total Accounts
             </span>
-            <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            <div className="p-2 rounded-lg bg-pink-500/10 text-pink-400 border border-pink-500/20">
               <Users className="w-4 h-4" />
             </div>
           </div>
@@ -190,12 +188,12 @@ export default function OLAPWarehouse() {
             {kpis ? kpis.total_subscribers.toLocaleString() : '7,043'}
           </div>
           <div className="text-xs text-zinc-400 flex items-center space-x-1.5 pt-1">
-            <span className="text-emerald-400 font-mono font-medium">
+            <span className="text-zinc-400 font-mono font-medium">
               {kpis ? kpis.retained_count.toLocaleString() : '5,174'}
             </span>
             <span>Retained</span>
             <span className="text-zinc-600">•</span>
-            <span className="text-rose-400 font-mono font-medium">
+            <span className="text-pink-400 font-mono font-medium">
               {kpis ? kpis.churn_count.toLocaleString() : '1,869'}
             </span>
             <span>Churned</span>
@@ -208,15 +206,15 @@ export default function OLAPWarehouse() {
             <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
               Overall Churn Rate
             </span>
-            <div className="p-2 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20">
+            <div className="p-2 rounded-lg bg-pink-500/10 text-pink-400 border border-pink-500/20">
               <TrendingDown className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-3xl font-bold font-mono text-rose-400">
+          <div className="text-3xl font-bold font-mono text-pink-400">
             {kpis ? `${kpis.overall_churn_rate.toFixed(1)}%` : '26.5%'}
           </div>
           <div className="text-xs text-zinc-400 flex items-center space-x-1 pt-1">
-            <span className="text-rose-400 font-mono">+1.8%</span>
+            <span className="text-pink-400 font-mono">+1.8%</span>
             <span>vs telecom industry baseline (24.7%)</span>
           </div>
         </div>
@@ -227,11 +225,11 @@ export default function OLAPWarehouse() {
             <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
               Annual ARR
             </span>
-            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <div className="p-2 rounded-lg bg-zinc-500/10 text-zinc-400 border border-zinc-500/20">
               <DollarSign className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-3xl font-bold font-mono text-emerald-400">
+          <div className="text-3xl font-bold font-mono text-zinc-400">
             {kpis ? `$${(kpis.total_arr / 1000000).toFixed(2)}M` : '$5.47M'}
           </div>
           <div className="text-xs text-zinc-400 flex items-center space-x-1 pt-1">
@@ -248,7 +246,7 @@ export default function OLAPWarehouse() {
             <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
               Avg Monthly Charges
             </span>
-            <div className="p-2 rounded-lg bg-violet-500/10 text-violet-400 border border-violet-500/20">
+            <div className="p-2 rounded-lg bg-zinc-500/10 text-zinc-400 border border-zinc-500/20">
               <CreditCard className="w-4 h-4" />
             </div>
           </div>
@@ -273,7 +271,7 @@ export default function OLAPWarehouse() {
               <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                 Multidimensional Rollup
               </span>
-              <span className="text-[11px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">
+              <span className="text-[11px] font-mono text-pink-400 bg-pink-500/10 border border-pink-500/20 px-2 py-0.5 rounded">
                 Fact_Subscriptions
               </span>
             </div>
@@ -288,18 +286,18 @@ export default function OLAPWarehouse() {
           <div className="h-72 w-full mt-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={groupedContractData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" vertical={false} />
                 <XAxis
                   dataKey="contract"
-                  stroke="#71717a"
-                  tick={{ fill: '#a1a1aa', fontSize: 11 }}
-                  axisLine={{ stroke: '#3f3f46' }}
+                  stroke="var(--graph-neutral)"
+                  tick={{ fill: 'var(--text-secondary)', fontSize: 11 }}
+                  axisLine={{ stroke: 'var(--border-subtle)' }}
                 />
                 <YAxis
-                  stroke="#71717a"
-                  tick={{ fill: '#a1a1aa', fontSize: 11 }}
+                  stroke="var(--graph-neutral)"
+                  tick={{ fill: 'var(--text-secondary)', fontSize: 11 }}
                   unit="%"
-                  axisLine={{ stroke: '#3f3f46' }}
+                  axisLine={{ stroke: 'var(--border-subtle)' }}
                   domain={[0, 60]}
                 />
                 <Tooltip content={<CustomGroupedTooltip />} />
@@ -307,9 +305,9 @@ export default function OLAPWarehouse() {
                   wrapperStyle={{ paddingTop: 12, fontSize: 12 }}
                   formatter={(value) => <span className="text-zinc-300 font-medium">{value}</span>}
                 />
-                <Bar dataKey="Fiber Optic" fill="#f43f5e" radius={[4, 4, 0, 0]} maxBarSize={32} />
-                <Bar dataKey="DSL" fill="#06b6d4" radius={[4, 4, 0, 0]} maxBarSize={32} />
-                <Bar dataKey="No Internet" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={32} />
+                <Bar dataKey="Fiber Optic" fill="var(--color-pink)" radius={[2, 2, 0, 0]} maxBarSize={32} />
+                <Bar dataKey="DSL" fill="var(--graph-neutral)" radius={[2, 2, 0, 0]} maxBarSize={32} />
+                <Bar dataKey="No Internet" fill="var(--graph-neutral)" radius={[2, 2, 0, 0]} maxBarSize={32} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -322,7 +320,7 @@ export default function OLAPWarehouse() {
               <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                 Payment Channel Forensics
               </span>
-              <span className="text-[11px] font-mono text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded">
+              <span className="text-[11px] font-mono text-pink-400 bg-pink-500/10 border border-pink-500/20 px-2 py-0.5 rounded">
                 Dim_Account
               </span>
             </div>
@@ -341,19 +339,19 @@ export default function OLAPWarehouse() {
                 layout="vertical"
                 margin={{ top: 5, right: 20, left: 25, bottom: 5 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" horizontal={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" horizontal={false} />
                 <XAxis
                   type="number"
-                  stroke="#71717a"
-                  tick={{ fill: '#a1a1aa', fontSize: 11 }}
+                  stroke="var(--graph-neutral)"
+                  tick={{ fill: 'var(--text-secondary)', fontSize: 11 }}
                   unit="%"
                   domain={[0, 50]}
                 />
                 <YAxis
                   type="category"
                   dataKey="payment_method"
-                  stroke="#71717a"
-                  tick={{ fill: '#d4d4d8', fontSize: 11 }}
+                  stroke="var(--graph-neutral)"
+                  tick={{ fill: 'var(--text-secondary)', fontSize: 11 }}
                   width={110}
                   tickFormatter={(val) => {
                     if (val.includes('Electronic')) return 'Electronic Check';
@@ -370,10 +368,10 @@ export default function OLAPWarehouse() {
                       key={`cell-${index}`}
                       fill={
                         entry.churn_rate_pct > 40
-                          ? '#f43f5e'
+                          ? 'var(--color-pink)'
                           : entry.churn_rate_pct > 18
-                          ? '#f59e0b'
-                          : '#10b981'
+                          ? 'var(--graph-neutral)'
+                          : 'var(--graph-neutral)'
                       }
                     />
                   ))}
@@ -408,7 +406,7 @@ export default function OLAPWarehouse() {
               placeholder="Filter contract or service..."
               value={tableSearch}
               onChange={(e) => setTableSearch(e.target.value)}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500 transition-colors"
+              className="w-full bg-zinc-950 border border-zinc-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-pink-500 transition-colors"
             />
           </div>
         </div>
@@ -517,9 +515,9 @@ export default function OLAPWarehouse() {
                         <span
                           className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono border ${
                             row.internet_service_type === 'Fiber optic'
-                              ? 'bg-rose-500/10 text-rose-300 border-rose-500/20'
+                              ? 'bg-pink-500/10 text-pink-300 border-pink-500/20'
                               : row.internet_service_type === 'DSL'
-                              ? 'bg-cyan-500/10 text-cyan-300 border-cyan-500/20'
+                              ? 'bg-pink-500/10 text-pink-300 border-pink-500/20'
                               : 'bg-zinc-800 text-zinc-400 border-zinc-700'
                           }`}
                         >
@@ -533,10 +531,10 @@ export default function OLAPWarehouse() {
                         <span
                           className={`inline-block font-bold px-2 py-0.5 rounded text-xs ${
                             isHighChurn
-                              ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
+                              ? 'bg-pink-500/15 text-pink-400 border border-pink-500/30'
                               : isLowChurn
-                              ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                              : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
+                              ? 'bg-zinc-500/15 text-zinc-400 border border-zinc-500/30'
+                              : 'bg-zinc-500/15 text-zinc-400 border border-zinc-500/30'
                           }`}
                         >
                           {row.churn_rate_pct.toFixed(2)}%
@@ -548,7 +546,7 @@ export default function OLAPWarehouse() {
                       <td className="py-3 px-4 text-right text-zinc-300">
                         ${row.avg_monthly_charges.toFixed(2)}
                       </td>
-                      <td className="py-3 px-4 text-right text-emerald-400 font-semibold">
+                      <td className="py-3 px-4 text-right text-zinc-400 font-semibold">
                         ${(row.total_monthly_mrr / 1000).toFixed(1)}k
                       </td>
                       <td className="py-3 px-4 text-right text-zinc-100 font-bold">
@@ -565,3 +563,5 @@ export default function OLAPWarehouse() {
     </div>
   );
 }
+
+

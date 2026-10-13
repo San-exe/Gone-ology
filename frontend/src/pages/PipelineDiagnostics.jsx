@@ -79,7 +79,7 @@ export default function PipelineDiagnostics() {
           <div className="text-white font-bold font-sans">{data.feature}</div>
           <div className="text-zinc-400 flex justify-between space-x-4">
             <span>Gini Importance:</span>
-            <span className="text-cyan-400 font-bold">{(data.importance * 100).toFixed(2)}%</span>
+            <span className="text-pink-400 font-bold">{(data.importance * 100).toFixed(2)}%</span>
           </div>
           <div className="text-zinc-500 text-[10px] pt-1">
             Raw weight: {data.importance.toFixed(4)}
@@ -100,15 +100,13 @@ export default function PipelineDiagnostics() {
         <h1 className="text-2xl font-black tracking-tight text-white flex items-center space-x-3">
           <span>ETL Integrity & Machine Learning Diagnostics</span>
         </h1>
-        <p className="text-sm text-zinc-400 leading-relaxed max-w-3xl mt-1">
-          Verification metrics for data extraction, dimension surrogate key resolution, and holdout test set evaluation for the retention classification model.
-        </p>
+
       </div>
 
       {/* Section 1: ETL Pipeline Health Summary */}
       <div className="space-y-3">
         <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400 flex items-center space-x-2">
-          <Database className="w-4 h-4 text-cyan-400" />
+          <Database className="w-4 h-4 text-pink-400" />
           <span>ETL Ingestion & Referential Integrity Health</span>
         </div>
 
@@ -119,7 +117,7 @@ export default function PipelineDiagnostics() {
               <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                 Extracted & Loaded
               </span>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">
+              <span className="text-[10px] font-mono text-zinc-400 bg-zinc-500/10 border border-zinc-500/20 px-2 py-0.5 rounded">
                 100% Ingested
               </span>
             </div>
@@ -137,11 +135,11 @@ export default function PipelineDiagnostics() {
               <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                 Imputed Anomalies
               </span>
-              <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">
+              <span className="text-[10px] font-mono text-pink-400 bg-pink-500/10 border border-pink-500/20 px-2 py-0.5 rounded">
                 Zero Tenure
               </span>
             </div>
-            <div className="text-3xl font-bold font-mono text-cyan-400">
+            <div className="text-3xl font-bold font-mono text-pink-400">
               11
             </div>
             <p className="text-xs text-zinc-400">
@@ -155,11 +153,11 @@ export default function PipelineDiagnostics() {
               <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                 Orphan Foreign Keys
               </span>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">
+              <span className="text-[10px] font-mono text-zinc-400 bg-zinc-500/10 border border-zinc-500/20 px-2 py-0.5 rounded">
                 Perfect Integrity
               </span>
             </div>
-            <div className="text-3xl font-bold font-mono text-emerald-400">
+            <div className="text-3xl font-bold font-mono text-zinc-400">
               0
             </div>
             <p className="text-xs text-zinc-400">
@@ -172,7 +170,7 @@ export default function PipelineDiagnostics() {
       {/* Section 2: Machine Learning Performance Scorecard */}
       <div className="space-y-3">
         <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400 flex items-center space-x-2">
-          <Cpu className="w-4 h-4 text-violet-400" />
+          <Cpu className="w-4 h-4 text-zinc-400" />
           <span>Holdout Test Evaluation (Balanced Random Forest)</span>
         </div>
 
@@ -182,7 +180,7 @@ export default function PipelineDiagnostics() {
             <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
               ROC-AUC Score
             </div>
-            <div className="text-3xl font-bold font-mono text-cyan-400">
+            <div className="text-3xl font-bold font-mono text-pink-400">
               {metrics ? metrics.roc_auc.toFixed(4) : '0.8422'}
             </div>
             <div className="text-[11px] text-zinc-400">
@@ -195,7 +193,7 @@ export default function PipelineDiagnostics() {
             <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
               Churn Recall (Sensitivity)
             </div>
-            <div className="text-3xl font-bold font-mono text-emerald-400">
+            <div className="text-3xl font-bold font-mono text-zinc-400">
               {metrics ? `${(metrics.recall * 100).toFixed(2)}%` : '79.41%'}
             </div>
             <div className="text-[11px] text-zinc-400">
@@ -208,7 +206,7 @@ export default function PipelineDiagnostics() {
             <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
               F1-Score
             </div>
-            <div className="text-3xl font-bold font-mono text-violet-400">
+            <div className="text-3xl font-bold font-mono text-zinc-400">
               {metrics ? `${(metrics.f1_score * 100).toFixed(2)}%` : '62.72%'}
             </div>
             <div className="text-[11px] text-zinc-400">
@@ -240,7 +238,7 @@ export default function PipelineDiagnostics() {
               <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                 Feature Attribution
               </span>
-              <span className="text-[11px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">
+              <span className="text-[11px] font-mono text-pink-400 bg-pink-500/10 border border-pink-500/20 px-2 py-0.5 rounded">
                 Gini Impurity
               </span>
             </div>
@@ -259,19 +257,19 @@ export default function PipelineDiagnostics() {
                 layout="vertical"
                 margin={{ top: 5, right: 30, left: 50, bottom: 5 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" horizontal={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" horizontal={false} />
                 <XAxis
                   type="number"
-                  stroke="#71717a"
-                  tick={{ fill: '#a1a1aa', fontSize: 11 }}
+                  stroke="var(--graph-neutral)"
+                  tick={{ fill: 'var(--text-secondary)', fontSize: 11 }}
                   unit="%"
                   domain={[0, 22]}
                 />
                 <YAxis
                   type="category"
                   dataKey="feature"
-                  stroke="#71717a"
-                  tick={{ fill: '#d4d4d8', fontSize: 11 }}
+                  stroke="var(--graph-neutral)"
+                  tick={{ fill: 'var(--text-secondary)', fontSize: 11 }}
                   width={150}
                 />
                 <Tooltip content={<CustomFeatureTooltip />} />
@@ -281,10 +279,10 @@ export default function PipelineDiagnostics() {
                       key={`cell-${index}`}
                       fill={
                         index >= 5
-                          ? '#06b6d4' // Top items (in reversed array)
+                          ? 'var(--color-pink)' // Highest ranked features (in reversed array)
                           : index >= 2
-                          ? '#8b5cf6'
-                          : '#10b981'
+                          ? 'var(--graph-neutral)'
+                          : 'var(--graph-neutral)'
                       }
                     />
                   ))}
@@ -318,7 +316,7 @@ export default function PipelineDiagnostics() {
               <span className="text-2xl font-bold text-zinc-200">
                 {metrics?.confusion_matrix?.true_negatives || 759}
               </span>
-              <span className="text-[10px] text-emerald-400 font-sans block">
+              <span className="text-[10px] text-zinc-400 font-sans block">
                 Retained correctly
               </span>
             </div>
@@ -328,7 +326,7 @@ export default function PipelineDiagnostics() {
               <span className="text-[10px] text-zinc-500 font-sans uppercase font-bold block">
                 False Positives (FP)
               </span>
-              <span className="text-2xl font-bold text-amber-400">
+              <span className="text-2xl font-bold text-zinc-400">
                 {metrics?.confusion_matrix?.false_positives || 276}
               </span>
               <span className="text-[10px] text-zinc-500 font-sans block">
@@ -341,23 +339,23 @@ export default function PipelineDiagnostics() {
               <span className="text-[10px] text-zinc-500 font-sans uppercase font-bold block">
                 False Negatives (FN)
               </span>
-              <span className="text-2xl font-bold text-rose-400">
+              <span className="text-2xl font-bold text-pink-400">
                 {metrics?.confusion_matrix?.false_negatives || 77}
               </span>
-              <span className="text-[10px] text-rose-400/80 font-sans block">
+              <span className="text-[10px] text-pink-400/80 font-sans block">
                 Missed churners
               </span>
             </div>
 
             {/* True Positives */}
-            <div className="p-4 rounded-xl bg-zinc-950 border border-emerald-500/30 bg-emerald-500/5 space-y-1">
-              <span className="text-[10px] text-emerald-400 font-sans uppercase font-bold block">
+            <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-500/30 bg-zinc-500/5 space-y-1">
+              <span className="text-[10px] text-zinc-400 font-sans uppercase font-bold block">
                 True Positives (TP)
               </span>
-              <span className="text-2xl font-bold text-emerald-400">
+              <span className="text-2xl font-bold text-zinc-400">
                 {metrics?.confusion_matrix?.true_positives || 297}
               </span>
-              <span className="text-[10px] text-emerald-300 font-sans block">
+              <span className="text-[10px] text-zinc-300 font-sans block">
                 Caught for retention
               </span>
             </div>
@@ -374,3 +372,5 @@ export default function PipelineDiagnostics() {
     </div>
   );
 }
+
+

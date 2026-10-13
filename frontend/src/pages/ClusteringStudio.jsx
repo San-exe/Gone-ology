@@ -31,34 +31,34 @@ import { getClusters, getElbowCurve } from '../api/client';
 const PERSONA_CONFIG = {
   0: {
     name: 'Budget Loyalists',
-    color: '#06b6d4', // Cyan
-    border: 'border-cyan-500/30',
-    bg: 'bg-cyan-500/10',
-    text: 'text-cyan-400',
+    color: 'var(--graph-neutral)',
+    border: 'border-zinc-300',
+    bg: 'bg-zinc-100',
+    text: 'text-zinc-700',
     description: 'Low Monthly Spend / High Tenure',
   },
   1: {
     name: 'VIP Champions',
-    color: '#8b5cf6', // Violet
-    border: 'border-violet-500/30',
-    bg: 'bg-violet-500/10',
-    text: 'text-violet-400',
+    color: 'var(--graph-neutral)',
+    border: 'border-zinc-500/30',
+    bg: 'bg-zinc-500/10',
+    text: 'text-zinc-400',
     description: 'High Monthly Spend / High Tenure',
   },
   2: {
     name: 'Flight Risk Early Adopters',
-    color: '#f43f5e', // Rose
-    border: 'border-rose-500/30',
-    bg: 'bg-rose-500/10',
-    text: 'text-rose-400',
+    color: 'var(--color-pink)',
+    border: 'border-pink-500/30',
+    bg: 'bg-pink-500/10',
+    text: 'text-pink-400',
     description: 'High Monthly Spend / Low Tenure (High Churn)',
   },
   3: {
     name: 'Casual Starters',
-    color: '#10b981', // Emerald
-    border: 'border-emerald-500/30',
-    bg: 'bg-emerald-500/10',
-    text: 'text-emerald-400',
+    color: 'var(--graph-neutral)',
+    border: 'border-zinc-500/30',
+    bg: 'bg-zinc-500/10',
+    text: 'text-zinc-400',
     description: 'Low Monthly Spend / Low Tenure (Testing Phase)',
   },
 };
@@ -122,7 +122,7 @@ export default function ClusteringStudio() {
   const CustomScatterTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
-      const persona = PERSONA_CONFIG[data.cluster_id] || { name: 'Unknown', color: '#fff' };
+      const persona = PERSONA_CONFIG[data.cluster_id] || { name: 'Unknown', color: 'var(--color-white)' };
       return (
         <div className="bg-zinc-950/95 border border-zinc-800 p-3 rounded-lg shadow-2xl backdrop-blur font-mono text-xs space-y-1.5">
           <div className="flex items-center space-x-2">
@@ -142,7 +142,7 @@ export default function ClusteringStudio() {
           {!data.isCentroid && (
             <div className="text-zinc-400 flex justify-between space-x-4">
               <span>Status:</span>
-              <span className={data.churn_flag === 1 ? 'text-rose-400 font-bold' : 'text-emerald-400'}>
+              <span className={data.churn_flag === 1 ? 'text-pink-400 font-bold' : 'text-zinc-400'}>
                 {data.churn_flag === 1 ? 'Churned' : 'Retained'}
               </span>
             </div>
@@ -162,10 +162,10 @@ export default function ClusteringStudio() {
           <div className="text-white font-bold font-sans">Clusters (K = {data.k})</div>
           <div className="text-zinc-300 flex justify-between space-x-4">
             <span>WCSS Inertia:</span>
-            <span className="text-cyan-400 font-bold">{data.wcss.toLocaleString()}</span>
+            <span className="text-pink-400 font-bold">{data.wcss.toLocaleString()}</span>
           </div>
           {data.k === 4 && (
-            <div className="text-[11px] font-sans text-emerald-400 font-semibold pt-1 border-t border-zinc-800">
+            <div className="text-[11px] font-sans text-zinc-400 font-semibold pt-1 border-t border-zinc-800">
               Optimal Elbow Criterion
             </div>
           )}
@@ -174,6 +174,55 @@ export default function ClusteringStudio() {
     }
     return null;
   };
+
+  const renderPersonaCard = (p) => {
+    const conf = PERSONA_CONFIG[p.cluster_id] || {
+      color: 'var(--color-white)',
+      border: 'border-zinc-800',
+      bg: 'bg-zinc-900',
+      text: 'text-white',
+    };
+
+    return (
+      <article
+        key={p.cluster_id}
+        className={`min-w-0 p-3 rounded-xl border bg-zinc-900/70 hover:bg-zinc-900 transition-all ${conf.border}`}
+      >
+        <div className="mb-2 space-y-1">
+          <div className="flex min-w-0 items-start gap-2">
+            <span className="mt-1 w-2.5 h-2.5 shrink-0 rounded-full" style={{ backgroundColor: conf.color }} />
+            <span className={`min-w-0 text-xs font-bold ${conf.text}`}>{p.persona_name}</span>
+          </div>
+          <div className="text-[11px] font-mono text-zinc-300 font-semibold">
+            {p.cluster_size.toLocaleString()} accounts ({p.cluster_pct.toFixed(1)}%)
+          </div>
+        </div>
+
+        <div className="text-[11px] text-zinc-400 leading-relaxed mb-2">
+          {p.archetype} • <span className="font-medium text-zinc-300">{p.risk_profile}</span>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 text-xs font-mono bg-zinc-950/60 p-2 rounded border border-zinc-800/80 mb-2">
+          <div className="min-w-0">
+            <span className="text-zinc-500 text-[10px] block">Centroid Tenure</span>
+            <span className="text-zinc-200 font-bold">{p.centroid_tenure_months.toFixed(1)} mos</span>
+          </div>
+          <div className="min-w-0">
+            <span className="text-zinc-500 text-[10px] block">Centroid Monthly</span>
+            <span className="text-zinc-200 font-bold">${p.centroid_monthly_charges.toFixed(2)}/mo</span>
+          </div>
+        </div>
+
+        <div className="text-[11px] text-zinc-400 bg-zinc-950/40 p-2 rounded border border-zinc-900 leading-relaxed">
+          <span className="text-zinc-300 font-semibold block mb-1">Strategy:</span>
+          {p.recommended_action}
+        </div>
+      </article>
+    );
+  };
+
+  const budgetPersona = clusterData?.personas?.find((persona) => persona.cluster_id === 0);
+  const otherPersonas = clusterData?.personas?.filter((persona) => persona.cluster_id !== 0) || [];
 
   return (
     <div className="space-y-8 animate-fadeIn">
@@ -186,9 +235,7 @@ export default function ClusteringStudio() {
           <h1 className="text-2xl font-black tracking-tight text-white flex items-center space-x-3">
             <span>Unsupervised Clustering & Retention Personas</span>
           </h1>
-          <p className="text-sm text-zinc-400 leading-relaxed max-w-3xl mt-1">
-            Mathematical segmentation using custom K-Means++ clustering over Tenure Months and Monthly Spend. Converged in 10 iterations to discover 4 archetypal retention personas.
-          </p>
+         
         </div>
 
         {/* Sample Filter */}
@@ -197,7 +244,7 @@ export default function ClusteringStudio() {
           <select
             value={sampleSize}
             onChange={(e) => setSampleSize(Number(e.target.value))}
-            className="bg-zinc-950 border border-zinc-700 text-white rounded px-2 py-1 text-xs focus:outline-none focus:border-cyan-500 font-mono"
+            className="bg-zinc-950 border border-zinc-700 text-white rounded px-2 py-1 text-xs focus:outline-none focus:border-pink-500 font-mono"
           >
             <option value={400}>400 Points</option>
             <option value={800}>800 Points</option>
@@ -206,10 +253,11 @@ export default function ClusteringStudio() {
         </div>
       </div>
 
-      {/* Main Grid: Scatter Plot (Left) + Elbow & Personas (Right) */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+      {/* Analytical charts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 items-start gap-6">
         {/* Left Column: 2D Scatter Plot */}
-        <div className="xl:col-span-8 bg-zinc-900/80 backdrop-blur border border-zinc-800/90 hover:border-zinc-700 transition-all rounded-xl p-6 shadow-sm flex flex-col justify-between">
+        <div className="md:col-span-2 xl:col-span-8 min-w-0">
+          <div className="bg-zinc-900/80 backdrop-blur border border-zinc-800/90 hover:border-zinc-700 transition-all rounded-xl p-6 shadow-sm flex flex-col">
           <div>
             <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
               <div>
@@ -250,7 +298,7 @@ export default function ClusteringStudio() {
               </div>
             </div>
 
-            <p className="text-xs text-zinc-400 mb-4">
+            <p className="text-xs text-zinc-400 mb-2">
               X-Axis represents customer tenure in months (0–72). Y-Axis represents monthly billing ($18–$120). Distinct colored points represent sampled accounts; highlighted cross markers denote mathematical centroids.
             </p>
           </div>
@@ -258,21 +306,21 @@ export default function ClusteringStudio() {
           {/* Scatter Chart */}
           <div className="h-[430px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+              <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
                 <XAxis
                   type="number"
                   dataKey="tenure_months"
                   name="Tenure"
                   unit=" mo"
                   domain={[0, 75]}
-                  stroke="#71717a"
-                  tick={{ fill: '#a1a1aa', fontSize: 11 }}
+                  stroke="var(--graph-neutral)"
+                  tick={{ fill: 'var(--text-secondary)', fontSize: 11 }}
                   label={{
                     value: 'Account Tenure (Months)',
                     position: 'insideBottom',
                     offset: -12,
-                    fill: '#71717a',
+                    fill: 'var(--graph-neutral)',
                     fontSize: 11,
                   }}
                 />
@@ -282,54 +330,54 @@ export default function ClusteringStudio() {
                   name="Monthly Charges"
                   unit="$"
                   domain={[15, 125]}
-                  stroke="#71717a"
-                  tick={{ fill: '#a1a1aa', fontSize: 11 }}
+                  stroke="var(--graph-neutral)"
+                  tick={{ fill: 'var(--text-secondary)', fontSize: 11 }}
                   label={{
                     value: 'Monthly Charges ($)',
                     angle: -90,
                     position: 'insideLeft',
-                    fill: '#71717a',
+                    fill: 'var(--graph-neutral)',
                     fontSize: 11,
                   }}
                 />
                 <Tooltip content={<CustomScatterTooltip />} />
 
-                {/* VIP Champions (Violet) */}
+                {/* VIP Champions: neutral series */}
                 {(selectedPersona === 'all' || selectedPersona === '1') && (
                   <Scatter
                     name="VIP Champions"
                     data={scatterByPersona[1]}
-                    fill="#8b5cf6"
+                    fill="var(--graph-neutral)"
                     opacity={0.7}
                   />
                 )}
 
-                {/* Flight Risk Early Adopters (Rose) */}
+                {/* Flight Risk Early Adopters: highlighted series */}
                 {(selectedPersona === 'all' || selectedPersona === '2') && (
                   <Scatter
                     name="Flight Risk Early Adopters"
                     data={scatterByPersona[2]}
-                    fill="#f43f5e"
+                    fill="var(--color-pink)"
                     opacity={0.75}
                   />
                 )}
 
-                {/* Budget Loyalists (Cyan) */}
+                {/* Budget Loyalists: neutral series */}
                 {(selectedPersona === 'all' || selectedPersona === '0') && (
                   <Scatter
                     name="Budget Loyalists"
                     data={scatterByPersona[0]}
-                    fill="#06b6d4"
+                    fill="var(--graph-neutral)"
                     opacity={0.7}
                   />
                 )}
 
-                {/* Casual Starters (Emerald) */}
+                {/* Casual Starters: neutral series */}
                 {(selectedPersona === 'all' || selectedPersona === '3') && (
                   <Scatter
                     name="Casual Starters"
                     data={scatterByPersona[3]}
-                    fill="#10b981"
+                    fill="var(--graph-neutral)"
                     opacity={0.7}
                   />
                 )}
@@ -338,7 +386,7 @@ export default function ClusteringStudio() {
                 <Scatter
                   name="Centroids"
                   data={centroidPoints}
-                  fill="#ffffff"
+                  fill="#FFFFFF"
                   shape="cross"
                 />
               </ScatterChart>
@@ -349,19 +397,19 @@ export default function ClusteringStudio() {
           <div className="pt-4 mt-2 border-t border-zinc-800/80 flex flex-wrap items-center justify-between text-xs text-zinc-400">
             <div className="flex items-center space-x-4">
               <span className="flex items-center space-x-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-violet-500" />
+                <span className="w-2.5 h-2.5 rounded-full bg-zinc-500" />
                 <span className="text-zinc-300">VIP Champions</span>
               </span>
               <span className="flex items-center space-x-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: 'var(--color-pink)' }} />
                 <span className="text-zinc-300">Flight Risk</span>
               </span>
               <span className="flex items-center space-x-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-cyan-500" />
+                <span className="w-2.5 h-2.5 rounded-full bg-zinc-500" />
                 <span className="text-zinc-300">Budget Loyalists</span>
               </span>
               <span className="flex items-center space-x-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                <span className="w-2.5 h-2.5 rounded-full bg-zinc-500" />
                 <span className="text-zinc-300">Casual Starters</span>
               </span>
             </div>
@@ -369,17 +417,19 @@ export default function ClusteringStudio() {
               Final WCSS: {clusterData?.final_wcss ? clusterData.final_wcss.toFixed(1) : '2,845.4'}
             </div>
           </div>
+          </div>
+
         </div>
 
-        {/* Right Column: Elbow Curve & Persona Cards */}
-        <div className="xl:col-span-4 space-y-6">
+        {/* Elbow curve */}
+        <div className="md:col-span-2 xl:col-span-4 min-w-0 space-y-4">
           {/* WCSS Elbow Curve Card */}
           <div className="bg-zinc-900/80 backdrop-blur border border-zinc-800/90 hover:border-zinc-700 transition-all rounded-xl p-5 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                 Mathematical Validation
               </span>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded font-bold">
+              <span className="text-[10px] font-mono text-zinc-400 bg-zinc-500/10 border border-zinc-500/20 px-2 py-0.5 rounded font-bold">
                 K = 4 Selected
               </span>
             </div>
@@ -397,16 +447,16 @@ export default function ClusteringStudio() {
                   data={elbowData?.elbow_points || []}
                   margin={{ top: 10, right: 15, left: -10, bottom: 0 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
                   <XAxis
                     dataKey="k"
-                    stroke="#71717a"
-                    tick={{ fill: '#a1a1aa', fontSize: 11 }}
+                    stroke="var(--graph-neutral)"
+                    tick={{ fill: 'var(--text-secondary)', fontSize: 11 }}
                     domain={[2, 6]}
                   />
                   <YAxis
-                    stroke="#71717a"
-                    tick={{ fill: '#a1a1aa', fontSize: 10 }}
+                    stroke="var(--graph-neutral)"
+                    tick={{ fill: 'var(--text-secondary)', fontSize: 10 }}
                     domain={[1500, 8500]}
                     tickFormatter={(val) => `${(val / 1000).toFixed(1)}k`}
                   />
@@ -414,16 +464,16 @@ export default function ClusteringStudio() {
                   <Line
                     type="monotone"
                     dataKey="wcss"
-                    stroke="#06b6d4"
+                    stroke="var(--color-pink)"
                     strokeWidth={2.5}
-                    dot={{ fill: '#06b6d4', r: 4 }}
-                    activeDot={{ r: 6, fill: '#22d3ee' }}
+                    dot={{ fill: 'var(--color-pink)', r: 4 }}
+                    activeDot={{ r: 6, fill: 'var(--color-pink-hover)' }}
                   />
                   <ReferenceDot
                     x={4}
                     y={elbowData?.elbow_points?.find((p) => p.k === 4)?.wcss || 2845.37}
                     r={7}
-                    fill="#10b981"
+                    fill="var(--graph-neutral)"
                     stroke="#ffffff"
                     strokeWidth={2}
                   />
@@ -432,61 +482,24 @@ export default function ClusteringStudio() {
             </div>
           </div>
 
-          {/* Persona Breakdown Cards */}
-          <div className="space-y-3">
-            <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400 px-1">
-              Cluster Persona Archetypes ({clusterData?.personas?.length || 4})
-            </div>
-
-            {clusterData?.personas?.map((p) => {
-              const conf = PERSONA_CONFIG[p.cluster_id] || {
-                color: '#fff',
-                border: 'border-zinc-800',
-                bg: 'bg-zinc-900',
-                text: 'text-white',
-              };
-              return (
-                <div
-                  key={p.cluster_id}
-                  className={`p-4 rounded-xl border bg-zinc-900/70 hover:bg-zinc-900 transition-all ${conf.border}`}
-                >
-                  <div className="flex items-center justify-between mb-1.5">
-                    <div className="flex items-center space-x-2">
-                      <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: conf.color }} />
-                      <span className={`text-xs font-bold ${conf.text}`}>
-                        {p.persona_name}
-                      </span>
-                    </div>
-                    <span className="text-[11px] font-mono text-zinc-300 font-semibold">
-                      {p.cluster_size.toLocaleString()} accounts ({p.cluster_pct.toFixed(1)}%)
-                    </span>
-                  </div>
-
-                  <div className="text-[11px] text-zinc-400 mb-2">
-                    {p.archetype} • <span className="font-medium text-zinc-300">{p.risk_profile}</span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 text-xs font-mono bg-zinc-950/60 p-2 rounded border border-zinc-800/80 mb-2.5">
-                    <div>
-                      <span className="text-zinc-500 text-[10px] block">Centroid Tenure</span>
-                      <span className="text-zinc-200 font-bold">{p.centroid_tenure_months.toFixed(1)} mos</span>
-                    </div>
-                    <div>
-                      <span className="text-zinc-500 text-[10px] block">Centroid Monthly</span>
-                      <span className="text-zinc-200 font-bold">${p.centroid_monthly_charges.toFixed(2)}/mo</span>
-                    </div>
-                  </div>
-
-                  <div className="text-[11px] text-zinc-400 bg-zinc-950/40 p-2 rounded border border-zinc-900 leading-snug">
-                    <span className="text-zinc-300 font-semibold block mb-0.5">Strategy:</span>
-                    {p.recommended_action}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          {budgetPersona && renderPersonaCard(budgetPersona)}
         </div>
+
+        <h2
+          id="cluster-personas-heading"
+          className="col-span-full -mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-400 px-1"
+        >
+          Cluster Persona Archetypes ({clusterData?.personas?.length || 4})
+        </h2>
+        {otherPersonas.map((persona) => (
+          <div key={persona.cluster_id} className="min-w-0 md:col-span-1 xl:col-span-4">
+            {renderPersonaCard(persona)}
+          </div>
+        ))}
       </div>
     </div>
   );
 }
+
+
+

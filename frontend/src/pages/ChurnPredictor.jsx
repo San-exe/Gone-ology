@@ -20,7 +20,7 @@ import { predictCustomer } from '../api/client';
 const PRESET_SCENARIOS = [
   {
     label: 'High-Risk Flight Risk',
-    color: 'border-rose-500/40 text-rose-400 bg-rose-500/10',
+    color: 'border-pink-500/40 text-pink-400 bg-pink-500/10',
     data: {
       tenure_months: 2,
       monthly_charges: 89.5,
@@ -37,7 +37,7 @@ const PRESET_SCENARIOS = [
   },
   {
     label: 'VIP Champion',
-    color: 'border-violet-500/40 text-violet-400 bg-violet-500/10',
+    color: 'border-zinc-500/40 text-zinc-400 bg-zinc-500/10',
     data: {
       tenure_months: 64,
       monthly_charges: 104.2,
@@ -54,7 +54,7 @@ const PRESET_SCENARIOS = [
   },
   {
     label: 'Budget Loyalist',
-    color: 'border-cyan-500/40 text-cyan-400 bg-cyan-500/10',
+    color: 'border-pink-500/40 text-pink-400 bg-pink-500/10',
     data: {
       tenure_months: 52,
       monthly_charges: 34.0,
@@ -71,7 +71,7 @@ const PRESET_SCENARIOS = [
   },
   {
     label: 'Casual Starter',
-    color: 'border-emerald-500/40 text-emerald-400 bg-emerald-500/10',
+    color: 'border-zinc-500/40 text-zinc-400 bg-zinc-500/10',
     data: {
       tenure_months: 8,
       monthly_charges: 29.5,
@@ -144,21 +144,55 @@ export default function ChurnPredictor() {
   // Determine risk theme colors
   const isHighRisk = probabilityPct >= 50;
   const isModerateRisk = probabilityPct >= 25 && probabilityPct < 50;
-  const riskColor = isHighRisk ? '#f43f5e' : isModerateRisk ? '#f59e0b' : '#10b981';
+  const riskColor = isHighRisk ? 'var(--color-pink)' : isModerateRisk ? 'var(--color-text-secondary)' : 'var(--color-charcoal)';
   const riskTierLabel = isHighRisk ? 'CRITICAL RISK' : isModerateRisk ? 'MODERATE RISK' : 'LOW RISK';
   const riskPillClass = isHighRisk
-    ? 'bg-rose-500/15 text-rose-400 border-rose-500/40'
+    ? 'bg-pink-500/15 text-pink-400 border-pink-500/40'
     : isModerateRisk
-    ? 'bg-amber-500/15 text-amber-400 border-amber-500/40'
-    : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/40';
+    ? 'bg-zinc-500/15 text-zinc-400 border-zinc-500/40'
+    : 'bg-zinc-500/15 text-zinc-400 border-zinc-500/40';
+
+  const tenureStage =
+    form.tenure_months <= 12
+      ? 'New account'
+      : form.tenure_months <= 48
+      ? 'Mid-cycle'
+      : 'Veteran';
+  const profileSummaryGroups = [
+    {
+      title: 'Subscription',
+      rows: [
+        ['Account tenure', `${form.tenure_months} months · ${tenureStage}`],
+        ['Contract', form.contract],
+        ['Internet service', form.internet_service],
+      ],
+    },
+    {
+      title: 'Billing & Support',
+      rows: [
+        ['Monthly charges', `$${form.monthly_charges.toFixed(2)}/mo`],
+        ['Payment method', form.payment_method],
+        ['Tech support', form.tech_support],
+        ['Online security', form.online_security],
+      ],
+    },
+    {
+      title: 'Household & Preferences',
+      rows: [
+        ['Senior citizen', form.senior_citizen === 1 ? 'Yes' : 'No'],
+        ['Paperless billing', form.paperless_billing],
+        ['Dependents', form.dependents],
+      ],
+    },
+  ];
 
   // SVG circular gauge math
-  const radius = 64;
+  const radius = 84;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (probabilityPct / 100) * circumference;
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <div className="w-full min-w-0 space-y-6 animate-fadeIn">
       {/* Title */}
       <div>
         <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1">
@@ -167,15 +201,13 @@ export default function ChurnPredictor() {
         <h1 className="text-2xl font-black tracking-tight text-white flex items-center space-x-3">
           <span>Real-Time Churn Predictor & Retention Simulator</span>
         </h1>
-        <p className="text-sm text-zinc-400 leading-relaxed max-w-3xl mt-1">
-          Simulate parameter adjustments to observe immediate shifts in churn likelihood, behavioural persona assignment, and prescriptive retention prescriptions.
-        </p>
+       
       </div>
 
       {/* Preset Scenarios */}
       <div className="bg-zinc-900/60 border border-zinc-800/80 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center space-x-2 text-xs text-zinc-400">
-          <Zap className="w-4 h-4 text-cyan-400" />
+          <Zap className="w-4 h-4 text-pink-400" />
           <span className="font-semibold text-zinc-300">Quick Test Archetypes:</span>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -192,12 +224,12 @@ export default function ChurnPredictor() {
       </div>
 
       {/* Two Column Grid: Simulator Form (Left) & Result Scorecard (Right) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid w-full min-w-0 grid-cols-1 xl:grid-cols-12 items-start gap-5">
         {/* Left Column: Dark Simulator Inputs */}
-        <div className="lg:col-span-7 bg-zinc-900/80 backdrop-blur border border-zinc-800/90 rounded-xl p-6 shadow-sm space-y-6">
+        <div className="min-w-0 xl:col-span-7 bg-zinc-900/80 backdrop-blur border border-zinc-800/90 rounded-xl p-5 md:p-6 shadow-sm space-y-5">
           <div className="border-b border-zinc-800 pb-3 flex items-center justify-between">
             <h2 className="text-sm font-bold uppercase tracking-wider text-white flex items-center space-x-2">
-              <User className="w-4 h-4 text-cyan-400" />
+              <User className="w-4 h-4 text-pink-400" />
               <span>Customer Feature Attributes</span>
             </h2>
             <button
@@ -233,7 +265,7 @@ export default function ChurnPredictor() {
                   <Clock className="w-3.5 h-3.5 text-zinc-400" />
                   <span>Account Tenure</span>
                 </label>
-                <span className="font-mono text-sm font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
+                <span className="font-mono text-sm font-bold text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded border border-pink-500/20">
                   {form.tenure_months} Months
                 </span>
               </div>
@@ -260,7 +292,7 @@ export default function ChurnPredictor() {
                   <CreditCard className="w-3.5 h-3.5 text-zinc-400" />
                   <span>Monthly Charges ($)</span>
                 </label>
-                <span className="font-mono text-sm font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                <span className="font-mono text-sm font-bold text-zinc-400 bg-zinc-500/10 px-2 py-0.5 rounded border border-zinc-500/20">
                   ${form.monthly_charges.toFixed(2)}/mo
                 </span>
               </div>
@@ -290,7 +322,7 @@ export default function ChurnPredictor() {
                 <select
                   value={form.contract}
                   onChange={(e) => updateField('contract', e.target.value)}
-                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-cyan-500 transition-colors"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-pink-500 transition-colors"
                 >
                   <option value="Month-to-month">Month-to-month (High Risk)</option>
                   <option value="One year">One year</option>
@@ -306,7 +338,7 @@ export default function ChurnPredictor() {
                 <select
                   value={form.internet_service}
                   onChange={(e) => updateField('internet_service', e.target.value)}
-                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-cyan-500 transition-colors"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-pink-500 transition-colors"
                 >
                   <option value="Fiber optic">Fiber optic (Gigabit)</option>
                   <option value="DSL">DSL Broadband</option>
@@ -322,7 +354,7 @@ export default function ChurnPredictor() {
                 <select
                   value={form.payment_method}
                   onChange={(e) => updateField('payment_method', e.target.value)}
-                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-cyan-500 transition-colors"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-pink-500 transition-colors"
                 >
                   <option value="Electronic check">Electronic check</option>
                   <option value="Mailed check">Mailed check</option>
@@ -339,7 +371,7 @@ export default function ChurnPredictor() {
                 <select
                   value={form.tech_support}
                   onChange={(e) => updateField('tech_support', e.target.value)}
-                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-cyan-500 transition-colors"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-pink-500 transition-colors"
                 >
                   <option value="No">No Tech Support</option>
                   <option value="Yes">Yes (Dedicated Priority)</option>
@@ -355,7 +387,7 @@ export default function ChurnPredictor() {
                 <select
                   value={form.online_security}
                   onChange={(e) => updateField('online_security', e.target.value)}
-                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-cyan-500 transition-colors"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-pink-500 transition-colors"
                 >
                   <option value="No">No Security Protection</option>
                   <option value="Yes">Yes (Active Antivirus/DDoS)</option>
@@ -371,7 +403,7 @@ export default function ChurnPredictor() {
                 <select
                   value={form.partner}
                   onChange={(e) => updateField('partner', e.target.value)}
-                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-cyan-500 transition-colors"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-pink-500 transition-colors"
                 >
                   <option value="No">Single Account (No)</option>
                   <option value="Yes">Partner Account (Yes)</option>
@@ -386,7 +418,7 @@ export default function ChurnPredictor() {
                   type="checkbox"
                   checked={form.senior_citizen === 1}
                   onChange={(e) => updateField('senior_citizen', e.target.checked ? 1 : 0)}
-                  className="rounded bg-zinc-800 border-zinc-700 text-cyan-500 focus:ring-0 w-4 h-4"
+                  className="rounded bg-zinc-800 border-zinc-700 text-pink-500 focus:ring-0 w-4 h-4"
                 />
                 <span>Senior Citizen</span>
               </label>
@@ -396,7 +428,7 @@ export default function ChurnPredictor() {
                   type="checkbox"
                   checked={form.paperless_billing === 'Yes'}
                   onChange={(e) => updateField('paperless_billing', e.target.checked ? 'Yes' : 'No')}
-                  className="rounded bg-zinc-800 border-zinc-700 text-cyan-500 focus:ring-0 w-4 h-4"
+                  className="rounded bg-zinc-800 border-zinc-700 text-pink-500 focus:ring-0 w-4 h-4"
                 />
                 <span>Paperless Billing</span>
               </label>
@@ -406,18 +438,50 @@ export default function ChurnPredictor() {
                   type="checkbox"
                   checked={form.dependents === 'Yes'}
                   onChange={(e) => updateField('dependents', e.target.checked ? 'Yes' : 'No')}
-                  className="rounded bg-zinc-800 border-zinc-700 text-cyan-500 focus:ring-0 w-4 h-4"
+                  className="rounded bg-zinc-800 border-zinc-700 text-pink-500 focus:ring-0 w-4 h-4"
                 />
                 <span>Has Dependents</span>
               </label>
             </div>
           </div>
+
+          <section className="border-t border-zinc-200 pt-5" aria-labelledby="customer-profile-summary">
+            <div className="mb-4 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+              <h3 id="customer-profile-summary" className="text-sm font-bold text-zinc-800">
+                Customer Profile Summary
+              </h3>
+              <span className="text-[11px] text-zinc-500">Current input selections</span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-5">
+              {profileSummaryGroups.map((group) => (
+                <section key={group.title} className="min-w-0" aria-label={group.title}>
+                  <h4 className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                    {group.title}
+                  </h4>
+                  <dl>
+                    {group.rows.map(([label, value], index) => (
+                      <div
+                        key={label}
+                        className={`flex min-w-0 items-start justify-between gap-2 py-1.5 ${index < group.rows.length - 1 ? 'border-b border-zinc-200' : ''}`}
+                      >
+                        <dt className="min-w-0 text-[11px] leading-relaxed text-zinc-500">{label}</dt>
+                        <dd className="min-w-0 break-words text-right text-[11px] font-medium leading-relaxed text-zinc-800">
+                          {value}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                </section>
+              ))}
+            </div>
+          </section>
         </div>
 
         {/* Right Column: Result Scorecard */}
-        <div className="lg:col-span-5 space-y-6">
+        <div className="min-w-0 xl:col-span-5 space-y-4">
           {/* Main Risk Score Card */}
-          <div className="bg-zinc-900/80 backdrop-blur border border-zinc-800/90 rounded-xl p-6 shadow-sm space-y-5">
+          <div className="bg-zinc-900/80 backdrop-blur border border-zinc-800/90 rounded-xl p-5 md:p-6 shadow-sm space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                 Inference Verdict
@@ -429,35 +493,35 @@ export default function ChurnPredictor() {
 
             {/* Circular Risk Meter */}
             <div className="flex flex-col items-center justify-center py-2">
-              <div className="relative w-40 h-40 flex items-center justify-center">
-                <svg className="w-full h-full transform -rotate-90">
+              <div className="relative w-52 h-52 flex items-center justify-center">
+                <svg viewBox="0 0 208 208" className="w-full h-full -rotate-90" shapeRendering="geometricPrecision">
                   {/* Track */}
                   <circle
-                    cx="80"
-                    cy="80"
+                    cx="104"
+                    cy="104"
                     r={radius}
-                    stroke="#27272a"
-                    strokeWidth="12"
+                    stroke="var(--border-subtle)"
+                    strokeWidth="11"
                     fill="transparent"
                   />
                   {/* Progress */}
                   <circle
-                    cx="80"
-                    cy="80"
+                    cx="104"
+                    cy="104"
                     r={radius}
                     stroke={riskColor}
-                    strokeWidth="12"
+                    strokeWidth="11"
                     fill="transparent"
                     strokeDasharray={circumference}
                     strokeDashoffset={strokeDashoffset}
                     strokeLinecap="round"
-                    className="transition-all duration-500 ease-out"
+                    className="transition-[stroke-dashoffset] duration-700 ease-out motion-reduce:transition-none"
                   />
                 </svg>
 
                 {/* Central Readout */}
                 <div className="absolute flex flex-col items-center justify-center">
-                  <span className="text-4xl font-extrabold font-mono text-zinc-100 tracking-tight">
+                  <span className="text-5xl font-extrabold font-mono text-zinc-100 tracking-tight">
                     {probabilityPct}%
                   </span>
                   <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-400 mt-0.5">
@@ -475,12 +539,12 @@ export default function ChurnPredictor() {
                     style={{
                       backgroundColor:
                         prediction?.cluster_persona === 'VIP Champions'
-                          ? '#8b5cf6'
+                          ? 'var(--graph-neutral)'
                           : prediction?.cluster_persona === 'Flight Risk Early Adopters'
-                          ? '#f43f5e'
+                          ? 'var(--color-pink)'
                           : prediction?.cluster_persona === 'Budget Loyalists'
-                          ? '#06b6d4'
-                          : '#10b981',
+                          ? 'var(--graph-neutral)'
+                          : 'var(--color-charcoal)',
                     }}
                   />
                   <span>{prediction?.cluster_persona || 'Segmenting...'}</span>
@@ -495,16 +559,16 @@ export default function ChurnPredictor() {
               </div>
 
               {prediction?.risk_factors && prediction.risk_factors.length > 0 ? (
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   {prediction.risk_factors.map((factor, idx) => (
                     <div
                       key={idx}
-                      className="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800/80 flex items-start space-x-2.5 text-xs"
+                      className="p-2 rounded-lg bg-zinc-950/70 border border-zinc-800/80 flex items-start space-x-2.5 text-xs"
                     >
                       {isHighRisk ? (
-                        <AlertTriangle className="w-4 h-4 text-rose-400 flex-shrink-0 mt-0.5" />
+                        <AlertTriangle className="w-4 h-4 text-pink-400 flex-shrink-0 mt-0.5" />
                       ) : (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-4 h-4 text-zinc-400 flex-shrink-0 mt-0.5" />
                       )}
                       <span className="text-zinc-300 leading-snug">{factor}</span>
                     </div>
@@ -518,10 +582,10 @@ export default function ChurnPredictor() {
             </div>
 
             {/* Prescriptive Retention Action Banner */}
-            <div className="pt-2">
-              <div className="p-4 rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-950 border border-zinc-700/80 space-y-2">
-                <div className="flex items-center space-x-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
-                  <Sparkles className="w-4 h-4 text-cyan-400" />
+            <div className="pt-1">
+              <div className="p-3.5 rounded-xl bg-zinc-900/80 border border-zinc-800/80 space-y-2">
+                <div className="flex items-center space-x-2 text-xs font-bold text-pink-400 uppercase tracking-wider">
+                  <Sparkles className="w-4 h-4 text-pink-400" />
                   <span>Prescriptive Retention Intervention</span>
                 </div>
                 <p className="text-xs text-zinc-200 leading-relaxed font-sans">
@@ -536,3 +600,5 @@ export default function ChurnPredictor() {
     </div>
   );
 }
+
+
